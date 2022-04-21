@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, ListCreateAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import permissions, status
 from .serializers import UserSerializer, ChangePasswordSerializer
-import jwt
-import datetime
 from .models import User
 
 # Create your views here.
@@ -50,7 +50,7 @@ class LoginView(APIView):
         )
 
 class ListUserView(ListCreateAPIView):
-    '''Endpoint for viewing all users in the system.'''
+    '''Endpoint for viewing all users in the system and creating new users.'''
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -91,3 +91,16 @@ class ChangePasswordView(UpdateAPIView):
 
             return Response(response)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['GET'])
+# def logout_user(request):
+#     logout(request)
+#     return Response('Seccessfully Logged Out.')
+
+class LogoutView(APIView):
+    def get(self, request):
+        logout(request)
+        return Response({
+            'message': 'Successfully Logged Out.'
+        })
