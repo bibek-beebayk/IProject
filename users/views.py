@@ -49,8 +49,8 @@ class LoginView(APIView):
             }
         )
 
-class ListUserView(ListCreateAPIView):
-    '''Endpoint for viewing all users in the system and creating new users.'''
+class ListUserView(ListAPIView):
+    '''Endpoint for viewing all users in the system.'''
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
